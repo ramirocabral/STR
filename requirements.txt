@@ -1,14 +1,6 @@
 pandas
 numpy
 matplotlib
-seaborn
-chardet
-setuptools
 scikit-learn
-sympy
 tensorflow
-scikit-image
 plotly
-nbformat
-librosa
-ffmpeg
