@@ -20,3 +20,4 @@ class PredictRequest(BaseModel):
     sunset: Optional[int] = None
     working_day: Optional[bool] = None
     holiday: Optional[bool] = None
+

@@ -17,33 +17,29 @@ def predict(req: PredictRequest):
         raise HTTPException(500, "Escaladores no cargados.")
 
     try:
-        if req.instances is not None:
-            X_np = np.array(req.instances, dtype=float)
-            if X_np.ndim != 2:
-                raise HTTPException(400, "'instances' debe ser 2D")
+        # Requiere todos los campos, no acepta 'instances'
+        fields = {
+            "date": req.date,
+            "temperature": req.temperature,
+            "humidity": req.humidity,
+            "rain": req.rain,
+            "snow": req.snow,
+            "pressure": req.pressure,
+            "wind_speed": req.wind_speed,
+            "wind_direction": req.wind_direction,
+            "clouds": req.clouds,
+            "sunrise": req.sunrise,
+            "sunset": req.sunset,
+            "working_day": req.working_day,
+            "holiday": req.holiday,
+        }
 
-        else:
-            fields = {
-                "date": req.date,
-                "temperature": req.temperature,
-                "humidity": req.humidity,
-                "rain": req.rain,
-                "snow": req.snow,
-                "pressure": req.pressure,
-                "wind_speed": req.wind_speed,
-                "wind_direction": req.wind_direction,
-                "clouds": req.clouds,
-                "sunrise": req.sunrise,
-                "sunset": req.sunset,
-                "working_day": req.working_day,
-                "holiday": req.holiday,
-            }
-            if any(v is None for v in fields.values()):
-                raise HTTPException(400, "Faltan campos. O envía 'instances'.")
+        if any(v is None for v in fields.values()):
+            raise HTTPException(400, "Faltan campos para la predicción.")
 
-            df = pd.DataFrame([fields])
-            df_proc = preprocess_data(df)
-            X_np = df_proc.values
+        df = pd.DataFrame([fields])
+        df_proc = preprocess_data(df)
+        X_np = df_proc.values
 
         X_scaled = main_module.X_SCALER.transform(X_np)
         preds_scaled = main_module.MODEL.predict(X_scaled)
@@ -52,7 +48,7 @@ def predict(req: PredictRequest):
     except Exception as e:
         raise HTTPException(500, f"Error durante la predicción: {e}")
 
+    # Solo un resultado, devolvemos escalar (no lista)
     return {
-        "predictions": preds.reshape(-1).tolist(),
-        "n": len(preds),
+        "prediction": float(preds[0][0])
     }

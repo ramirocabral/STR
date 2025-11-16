@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from api.predict import router as predict_router
+from api.data_retriever import router as data_retriever_router
 from ml.loader import find_and_load_model, load_scaler
 # import sys
 import os
@@ -35,3 +36,4 @@ def health():
     }
 
 app.include_router(predict_router)
+app.include_router(data_retriever_router)
