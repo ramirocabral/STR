@@ -10,7 +10,7 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     col0 = data.columns[0]
 
     if data[col0].isna().any():
-        print("⚠️ Algunas fechas no se pudieron convertir correctamente.")
+        print("Algunas fechas no se pudieron convertir correctamente.")
 
     data[col0] = pd.to_datetime(data[col0], utc=True, errors="coerce")
 

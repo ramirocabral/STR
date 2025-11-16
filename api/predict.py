@@ -39,9 +39,9 @@ def predict(req: PredictRequest):
 
         df = pd.DataFrame([fields])
         df_proc = preprocess_data(df)
-        X_np = df_proc.values
 
-        X_scaled = main_module.X_SCALER.transform(X_np)
+        # pass DataFrame to scaler so feature names match and sklearn doesn't warn
+        X_scaled = main_module.X_SCALER.transform(df_proc)
         preds_scaled = main_module.MODEL.predict(X_scaled)
         preds = main_module.Y_SCALER.inverse_transform(preds_scaled.reshape(-1, 1))
 

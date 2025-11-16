@@ -58,7 +58,7 @@ reduce_lr = ReduceLROnPlateau(
 # --- Entrenamiento ---
 history = model.fit(
     X_train, T_train,
-    batch_size=128,
+    batch_size=16,
     epochs=1000,
     verbose=1,
     validation_data=(X_test, T_test),
